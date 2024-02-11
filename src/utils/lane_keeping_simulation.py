@@ -49,7 +49,7 @@ class LaneKeepingHandler:
     def connect_to_client(self):
         print("Connecting to Unreal Engine Client")
         self.client = carla.Client("127.0.0.1", 2000)
-        self.client.set_timeout(30)
+        self.client.set_timeout(50)
         self.world = self.client.get_world()
         if os.path.basename(self.world.get_map().name) != 'Town04':
             self.world: carla.World = self.client.load_world('Town04')
