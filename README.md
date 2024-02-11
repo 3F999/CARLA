@@ -1,10 +1,15 @@
 # CARLA
-Simulation Autonomous Vehicles
+This repository provides useful tutorials for the CARLA simulator
 
-CARLA REQUIREMENTS
+# Basics of Simulation Autonomous Vehicles
 
-Install PyCharm as IDE
+Please install:
+- PyCharm as IDE
+- Python 3.7
+- Create a Virtual Environment
 
+Then, install the required packages using pip:
 ```bash
-
+pip install -r requirements.txt
 ```
+Be patient, it may take a while to install all the packages.
