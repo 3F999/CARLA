@@ -8,7 +8,7 @@ from src.utils.camera_geometry import CameraGeometry
 
 
 class LaneDetectionHandler:
-    def __init__(self, cam_geom=CameraGeometry(), model_path: str = "fastai_model.pth",
+    def __init__(self, cam_geom=CameraGeometry(), model_path: str = os.path.join("lane_detector", "fastai_model.pth"),
                  processing_device: str = "cpu") -> None:
         self.cg = cam_geom
         self.cut_v, self.grid = self.cg.precompute_grid()
@@ -99,9 +99,9 @@ class LaneDetectionHandler:
                     prediction_mask[height_index][width_index] = (255, 0, 0)
                 elif right_line_mask[height_index][width_index]:
                     prediction_mask[height_index][width_index] = (0, 0, 255)
-        visualized_img: np.ndarray = ((0.4 * img_bgr) + (0.6 * prediction_mask)).astype("uint8")
-        cv2.imshow("lane_detection_output", visualized_img)
-        cv2.waitKey(10)
+        # visualized_img: np.ndarray = ((0.4 * img_bgr) + (0.6 * prediction_mask)).astype("uint8")
+        # cv2.imshow("lane_detection_output", visualized_img)
+        # cv2.waitKey(10)
         # cv2.destroyAllWindows()
 
 

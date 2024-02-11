@@ -7,7 +7,6 @@ import numpy as np
 import pygame
 from spatialmath import SE2
 
-from utils.config_loader import config
 
 
 def draw_waypoints(world_, waypoints_, road_id=None, life_time=50.0):
@@ -27,81 +26,7 @@ def filter_waypoints(waypoints_, road_id):
     return filtered_waypoints_
 
 
-class TrajectoryToFollow:
-    def __init__(self, trajectory_index: int = config.CARLA_simulator.FOLLOW_TRAJECTORY.TRAJECTORY_INDEX) -> None:
-        self.trajectory_index = trajectory_index
 
-    def get_trajectory_data(self) -> Tuple[Any, list, list]:
-        if self.trajectory_index == 0:
-            carla_map = config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_0.MAP
-            road_id_list: list = config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_0.ROAD_ID
-            filtered_point_index_list: list = \
-                config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_0.FILTERED_POINT_INDEX
-        elif self.trajectory_index == 1:
-            carla_map = config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_1.MAP
-            road_id_list: list = config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_1.ROAD_ID
-            filtered_point_index_list: list = \
-                config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_1.FILTERED_POINT_INDEX
-
-        elif self.trajectory_index == 2:
-            carla_map = config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_2.MAP
-            road_id_list: list = config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_2.ROAD_ID
-            filtered_point_index_list: list = \
-                config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_2.FILTERED_POINT_INDEX
-
-        elif self.trajectory_index == 3:
-            carla_map = config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_3.MAP
-            road_id_list: list = config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_3.ROAD_ID
-            filtered_point_index_list: list = \
-                config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_3.FILTERED_POINT_INDEX
-
-        elif self.trajectory_index == 4:
-            carla_map = config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_4.MAP
-            road_id_list: list = config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_4.ROAD_ID
-            filtered_point_index_list: list = \
-                config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_4.FILTERED_POINT_INDEX
-        else:
-            raise NotImplementedError('A trajectory with index {} has not been implemented.'
-                                      .format(self.trajectory_index))
-        return carla_map, road_id_list, filtered_point_index_list
-
-    def get_ego_vehicle_spwan_point(self) -> Union[Dict[str, int], Dict[str, int]]:
-        if self.trajectory_index == 0:
-            ego_spawn_point: Union = \
-                {'road_id': config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_0.
-                EGO_VEHICLE_SPAWN_POINT.ROAD_ID,
-                 'filtered_points_index': config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_0.
-                 EGO_VEHICLE_SPAWN_POINT.FILTERED_POINT_INDEX}
-        elif self.trajectory_index == 1:
-            ego_spawn_point: Union = \
-                {'road_id': config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_1.
-                EGO_VEHICLE_SPAWN_POINT.ROAD_ID,
-                 'filtered_points_index': config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_1.
-                 EGO_VEHICLE_SPAWN_POINT.FILTERED_POINT_INDEX}
-
-        elif self.trajectory_index == 2:
-            ego_spawn_point: Union = \
-                {'road_id': config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_2.
-                EGO_VEHICLE_SPAWN_POINT.ROAD_ID,
-                 'filtered_points_index': config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_2.
-                 EGO_VEHICLE_SPAWN_POINT.FILTERED_POINT_INDEX}
-
-        elif self.trajectory_index == 3:
-            ego_spawn_point: Union = \
-                {'road_id': config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_3.
-                EGO_VEHICLE_SPAWN_POINT.ROAD_ID,
-                 'filtered_points_index': config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_3.
-                 EGO_VEHICLE_SPAWN_POINT.FILTERED_POINT_INDEX}
-
-        elif self.trajectory_index == 4:
-            ego_spawn_point: Union = \
-                {'road_id': config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_4.
-                EGO_VEHICLE_SPAWN_POINT.ROAD_ID,
-                 'filtered_points_index': config.carla_trajectories.TRAJECTORY_TO_FOLLOW.TRAJECTORY_INDEX_4.
-                 EGO_VEHICLE_SPAWN_POINT.FILTERED_POINT_INDEX}
-        else:
-            raise NotImplementedError('A trajectory with index {} has not been implemented.')
-        return ego_spawn_point
 
 
 def carla_vec_to_np_array(vec):
@@ -285,107 +210,14 @@ class VehicleStates:
         self.center_of_mass = {"cg_x": self.physics_control.center_of_mass.x,
                                "cg_y": self.physics_control.center_of_mass.y,
                                "cg_z": self.physics_control.center_of_mass.z}
-        self.distance_cg_to_front_axle: float = config.vehicle.a
-        self.distance_cg_to_rear_axle: float = config.vehicle.b
+        self.distance_cg_to_front_axle: float = 2.875/2
+        self.distance_cg_to_rear_axle: float = 2.875/2
         self.wheelbase: float = self.distance_cg_to_front_axle + self.distance_cg_to_rear_axle
         self.inertia_zz: float = 0.95 * self.mass * (self.wheelbase / 2) ** 2
-        self.cornering_stiffness_tyre_FL: float = config.vehicle.cornering_stiffness.tyre_FL
-        self.cornering_stiffness_tyre_FR: float = config.vehicle.cornering_stiffness.tyre_FR
-        self.cornering_stiffness_tyre_RL: float = config.vehicle.cornering_stiffness.tyre_RL
-        self.cornering_stiffness_tyre_RR: float = config.vehicle.cornering_stiffness.tyre_RR
-        self.cornering_stiffness_bicycle_model: Union[Dict[str, float], Dict[str, float]] = \
-            {"front": self.cornering_stiffness_tyre_FL + self.cornering_stiffness_tyre_FR,
-             "rear": self.cornering_stiffness_tyre_RL + self.cornering_stiffness_tyre_RR}
 
 
-class VehicleStatesROS:
-    def __init__(self, location_x, location_y, location_z, rotation_roll_deg, rotation_pitch_deg, rotation_yaw_deg,
-                 linear_velocity_x, linear_velocity_y, linear_velocity_z, angular_velocity_x, angular_velocity_y,
-                 angular_velocity_z, linear_acceleration_x, linear_acceleration_y, linear_acceleration_z,
-                 mass, center_of_mass_x, center_of_mass_y, center_of_mass_z):
-        self.location_x = location_x
-        self.location_y = location_y
-        self.location_z = location_z
-
-        self.rotation_roll_deg = rotation_roll_deg
-        self.rotation_pitch_deg = rotation_pitch_deg
-        self.rotation_yaw_deg = rotation_yaw_deg
-
-        self.linear_velocity_x = linear_velocity_x
-        self.linear_velocity_y = linear_velocity_y
-        self.linear_velocity_z = linear_velocity_z
-        self.overall_linear_velocity = np.linalg.norm(np.array([linear_velocity_x,
-                                                                linear_velocity_y,
-                                                                linear_velocity_z]))
-        # in vehicle reference frame
-        self.linear_velocity_x_relative, self.linear_velocity_y_relative = \
-            convert_from_global_to_local_reference_frame(self.linear_velocity_x, self.linear_velocity_y,
-                                                         self.rotation_yaw_deg)
-        self.side_slip_angle: float = math.atan(self.linear_velocity_y_relative / self.linear_velocity_x_relative) \
-            if self.linear_velocity_x_relative != 0 else 0
-
-        self.angular_velocity_x = angular_velocity_x
-        self.angular_velocity_y = angular_velocity_y
-        self.angular_velocity_z = angular_velocity_z
-        self.overall_angular_velocity = np.linalg.norm(np.array([angular_velocity_x,
-                                                                 angular_velocity_y,
-                                                                 angular_velocity_z]))
-        self.linear_acceleration_x = linear_acceleration_x
-        self.linear_acceleration_y = linear_acceleration_y
-        self.linear_acceleration_z = linear_acceleration_z
-        self.overall_linear_acceleration = np.linalg.norm(np.array([linear_acceleration_x,
-                                                                    linear_acceleration_y,
-                                                                    linear_acceleration_z]))
-        self.mass = mass
-        self.center_of_mass_x = center_of_mass_x
-        self.center_of_mass_y = center_of_mass_y
-        self.center_of_mass_z = center_of_mass_z
-        self.center_of_mass = {"cg_x": self.center_of_mass_x,
-                               "cg_y": self.center_of_mass_y,
-                               "cg_z": self.center_of_mass_z}
-
-        self.distance_cg_to_front_axle: float = config.vehicle.a
-        self.distance_cg_to_rear_axle: float = config.vehicle.b
-        self.wheelbase: float = self.distance_cg_to_front_axle + self.distance_cg_to_rear_axle
-        self.inertia_zz: float = 0.95 * self.mass * (self.wheelbase / 2) ** 2
-        self.cornering_stiffness_tyre_FL: float = config.vehicle.cornering_stiffness.tyre_FL
-        self.cornering_stiffness_tyre_FR: float = config.vehicle.cornering_stiffness.tyre_FR
-        self.cornering_stiffness_tyre_RL: float = config.vehicle.cornering_stiffness.tyre_RL
-        self.cornering_stiffness_tyre_RR: float = config.vehicle.cornering_stiffness.tyre_RR
-        self.cornering_stiffness_bicycle_model: Union[Dict[str, float], Dict[str, float]] = \
-            {"front": self.cornering_stiffness_tyre_FL + self.cornering_stiffness_tyre_FR,
-             "rear": self.cornering_stiffness_tyre_RL + self.cornering_stiffness_tyre_RR}
 
 
-class RoadFeatures:
-    def __init__(self, waypoints: np.ndarray,
-                 target_waypoint_multiplier: float = config.carla_trajectories.RATIO_TO_SELECT_TARGET_WAYPOINT) -> None:
-        self.waypoints = waypoints
-        self.waypoints_longitudinal = waypoints[:, 0]
-        self.waypoints_lateral = waypoints[:, 1]
-        self.fitted_polyline = np.polyfit(self.waypoints_longitudinal, self.waypoints_lateral, deg=3)
-        self.fitted_line = np.poly1d(self.fitted_polyline)
-        self.derivitive_order_1 = np.polyder(self.fitted_line, m=1)
-        self.derivitive_order_2 = np.polyder(self.fitted_line, m=2)
-        self.derivitive_order_3 = np.polyder(self.fitted_line, m=3)
-        self.target_waypoint: List[float] = [waypoints[int(target_waypoint_multiplier * len(waypoints))][0],
-                                             waypoints[int(target_waypoint_multiplier * len(waypoints))][1]]
-
-        self.road_curvature: Union[float, Any] = lambda: (1 + self.derivitive_order_1(self.target_waypoint[0]) ** 2) \
-                                                         ** 1.5 / (self.derivitive_order_2(self.target_waypoint[0]))
-        self.mean_road_curvature_absolute = np.mean(
-            [abs((1 + self.derivitive_order_1(waypoint_longitudinal) ** 2) ** 1.5 /
-                 (self.derivitive_order_2(waypoint_longitudinal)))
-             for waypoint_longitudinal in self.waypoints_longitudinal])
-
-        self.road_curvature_inverse = lambda: 1 / self.road_curvature()
-        self.theta_e: Union[float, Any] = lambda: math.atan(self.derivitive_order_1(self.target_waypoint[0]))
-        self.e_cg: Union[float, Any] = lambda: self.target_waypoint[1]
 
 
-def calculate_state_variables(road_params: RoadFeatures, vehicle_states: VehicleStates) -> np.array:
-    x0_ = np.array([vehicle_states.side_slip_angle, np.radians(vehicle_states.angular_velocity_z),
-                    road_params.theta_e(), road_params.e_cg()]).reshape(-1, 1)
-    # if -0.5 < e_cg < -0.5 and -np.radians(20) < theta_e < np.radians(20):  # To prevent oscillation behavior
-    #     x0_ = np.array([0, 0, 0, 0]).reshape(-1, 1)
-    return x0_
+

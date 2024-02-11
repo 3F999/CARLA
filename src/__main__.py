@@ -3,7 +3,7 @@ import time
 import carla
 
 from src.simulator_handler import SimulatorHandler
-from utils.vehicle_command import VehicleCommand
+# from utils.vehicle_command import VehicleCommand
 
 if __name__ == "__main__":
     simulator_handler = SimulatorHandler(town_name="Town04")
@@ -26,6 +26,3 @@ if __name__ == "__main__":
     # VehicleCommand(throttle=1.0).send_control(simulator_handler.vehicle)
     simulator_handler.vehicle.set_autopilot(True)
     time.sleep(100.0)
-
-
-
