@@ -84,7 +84,7 @@ class LaneKeepingHandler:
         else:
             cg = CameraGeometry()
 
-        self.lane_detector_handler = LaneDetectionHandler(cam_geom=cg, model_path="C:\\Users\\behna\\OneDrive\\Dokumente\\My Doccuments\\Pycharm_projects\\CARLA_tutorial\\src\\fastai_model.pth")
+        self.lane_detector_handler = LaneDetectionHandler(cam_geom=cg, model_path="C:\\Users\\behna\\OneDrive\\Dokumente\\My Doccuments\\Pycharm_projects\\CARLA\\src\\lane_detector\\fastai_model.pth")
         self.lane_detector_handler.load()
         # windshield cam
         cam_windshield_transform = carla.Transform(carla.Location(x=0.5, z=cg.height),
