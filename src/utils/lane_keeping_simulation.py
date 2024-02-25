@@ -15,7 +15,7 @@ from src.utils.vehicle_command import VehicleCommand
 
 
 class LaneKeepingHandler:
-    def __init__(self, fps: int = 30, vehicle_velocity: float = 10, half_image: bool = True,
+    def __init__(self, fps: int = 10, vehicle_velocity: float = 10, half_image: bool = True,
                  use_lane_detector: bool = True):
 
         self.controller = PurePursuitPlusPID()  # TODO:to be debuged later 
@@ -84,8 +84,9 @@ class LaneKeepingHandler:
         else:
             cg = CameraGeometry()
 
-        self.lane_detector_handler = LaneDetectionHandler(cam_geom=cg, model_path="C:\\Users\\behna\\OneDrive\\Dokumente\\My Doccuments\\Pycharm_projects\\CARLA\\src\\lane_detector\\fastai_model.pth")
-        self.lane_detector_handler.load()
+        if self.use_lane_detector is True:
+            self.lane_detector_handler = LaneDetectionHandler(cam_geom=cg, model_path="C:\\Users\\behna\\OneDrive\\Dokumente\\My Doccuments\\Pycharm_projects\\CARLA\\src\\lane_detector\\fastai_model.pth")
+            self.lane_detector_handler.load()
         # windshield cam
         cam_windshield_transform = carla.Transform(carla.Location(x=0.5, z=cg.height),
                                                    carla.Rotation(pitch=cg.pitch_deg))
@@ -101,7 +102,7 @@ class LaneKeepingHandler:
         self.actor_list.append(camera_windshield)
         self.sensor_list.append(camera_windshield)
 
-    def get_sensor_data(self, sync_mode, timeout: float = 0.5):
+    def get_sensor_data(self, sync_mode, timeout: float = 3):  # Fixme:Tobe decreased later because it slows down simulation
         tick_response = sync_mode.tick(timeout=timeout)
         snapshot, image_rgb, image_windshield = tick_response
         return snapshot, image_rgb, image_windshield
