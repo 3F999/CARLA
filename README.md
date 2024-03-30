@@ -13,4 +13,5 @@ Then, install the required packages using pip:
 pip install -r requirements.txt
 ```
 Be patient, it may take a while to install all the packages.
- Reference: https://github.com/thomasfermi/Algorithms-for-Automated-Driving
+
+Reference: https://github.com/thomasfermi/Algorithms-for-Automated-Driving
