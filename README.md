@@ -14,4 +14,6 @@ pip install -r requirements.txt
 ```
 Be patient, it may take a while to install all the packages.
 
-Reference: https://github.com/thomasfermi/Algorithms-for-Automated-Driving
+## Acknowledgements
+The source codes for this repository is heavily inspired by: 
+[Algorithms-for-Automated-Driving](https://github.com/thomasfermi/Algorithms-for-Automated-Driving).

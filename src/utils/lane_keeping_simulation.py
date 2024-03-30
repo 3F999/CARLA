@@ -1,4 +1,5 @@
 import copy
+import io
 import os
 
 import carla
@@ -49,11 +50,28 @@ class LaneKeepingHandler:
     def connect_to_client(self):
         print("Connecting to Unreal Engine Client")
         self.client = carla.Client("127.0.0.1", 2000)
-        self.client.set_timeout(50)
-        self.world = self.client.get_world()
-        if os.path.basename(self.world.get_map().name) != 'Town04':
-            self.world: carla.World = self.client.load_world('Town04')
-        print("Clinet Connection Established")
+        self.client.set_timeout(70)
+        # self.world = self.client.get_world()
+        # if os.path.basename(self.world.get_map().name) != 'Town04':
+        #     self.world: carla.World = self.client.load_world('Town04')
+        vertex_distance = 2.0  # in meters
+        max_road_length = 500.0  # in meters
+        wall_height = 0.5  # in meters
+        extra_width = 0.6  # in meters
+        with io.open("Test2.xodr", "r") as f:
+            xodr_xml = f.read()
+
+        # Define OpenDRIVE generation parameters
+        opendrive_params = carla.OpendriveGenerationParameters(
+                vertex_distance=vertex_distance,
+                max_road_length=max_road_length,
+                wall_height=wall_height,
+                additional_width=extra_width,
+                smooth_junctions=True,
+                enable_mesh_visibility=True)
+        # Generate the world based on the OpenDRIVE file and parameters
+        self.world = self.client.generate_opendrive_world(xodr_xml, opendrive_params)
+        print("Client Connection Established")
 
     def weather_parameters(self, predefined_weather=carla.WeatherParameters.ClearNoon):
         self.world.set_weather(predefined_weather)

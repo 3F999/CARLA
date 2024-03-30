@@ -17,7 +17,7 @@ class SimulatorHandler:
         self.vehicle_blueprint = None
 
         # create data save directories (if they don't exist)
-        self.save_dir = os.path.join(os.path.dirname(__file__), "data", "simulation0")
+        self.save_dir = os.path.join(os.path.dirname(__file__), "data", "simulation2")
         if not os.path.exists(self.save_dir):
             os.makedirs(self.save_dir)
         if not os.path.exists(os.path.join(self.save_dir, "rgb_cam")):
@@ -90,13 +90,13 @@ class SimulatorHandler:
         return ego_imu
 
     def rgb_cam_callback(self, image):
-        # image.save_to_disk(f"{self.save_dir}/rgb_cam/%06d.jpg" % image.frame)
-        raw_image = np.array(image.raw_data)
-
-        rgba_image = raw_image.reshape((self.IM_HEIGHT, self.IM_WIDTH, 4))  # because carla rgb cam is rgba
-        rgb_image = rgba_image[:, :, :3]
-        rgb_image = cv2.cvtColor(rgb_image, cv2.COLOR_BGR2RGB)
-        left_poly_, right_poly_ = self.lane_detector(rgb_image)
+        image.save_to_disk(f"{self.save_dir}/rgb_cam/%06d.jpg" % image.frame)
+        # raw_image = np.array(image.raw_data)
+        #
+        # rgba_image = raw_image.reshape((self.IM_HEIGHT, self.IM_WIDTH, 4))  # because carla rgb cam is rgba
+        # rgb_image = rgba_image[:, :, :3]
+        # rgb_image = cv2.cvtColor(rgb_image, cv2.COLOR_BGR2RGB)
+        # left_poly_, right_poly_ = self.lane_detector(rgb_image)
         # plt.imshow(rgb_image)
         # plt.show()
         # cv2.imshow("rgb camera", rgb_image)  # FixMe: Replace with pygame visualization
