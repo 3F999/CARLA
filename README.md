@@ -4,7 +4,8 @@ This repository provides useful tutorials for the CARLA simulator
 # Basics of Simulation Autonomous Vehicles
 
 Please install:
-- PyCharm as IDE
+- CARLA_0.9.13
+- PyCharm as IDE version 2023.2.3
 - Python 3.7
 - Create a Virtual Environment
 
