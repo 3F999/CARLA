@@ -7,7 +7,7 @@ Please install:
 - CARLA_0.9.13
 - PyCharm as IDE version 2023.2.3
 - Python 3.7
-- Create a Virtual Environment
+- Create a Virtual Environment based on Python version3.7
 
 Then, install the required packages using pip:
 ```bash
