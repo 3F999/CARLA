@@ -50,7 +50,7 @@ class LaneDetectionHandler:
 
     def __predict__(self, img_):
         with torch.no_grad():
-            image_tensor = img_.transpose(2, 0, 1).astype('float32') / 255
+            image_tensor = img_.transpose(2, 0, 1).astype('float32') / 255   # data pre processing
             x_tensor = torch.from_numpy(image_tensor).to(self.device).unsqueeze(0)
             model_output = torch.softmax(self.model.forward(x_tensor), dim=1).cpu().numpy()
         return model_output
@@ -99,16 +99,17 @@ class LaneDetectionHandler:
                     prediction_mask[height_index][width_index] = (255, 0, 0)
                 elif right_line_mask[height_index][width_index]:
                     prediction_mask[height_index][width_index] = (0, 0, 255)
-        # visualized_img: np.ndarray = ((0.4 * img_bgr) + (0.6 * prediction_mask)).astype("uint8")
-        # cv2.imshow("lane_detection_output", visualized_img)
-        # cv2.waitKey(10)
+        visualized_img: np.ndarray = ((0.4 * img_bgr) + (0.6 * prediction_mask)).astype("uint8")
+        cv2.imshow("lane_detection_output", visualized_img)
+        cv2.waitKey(10)
         # cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
-    lane_detection_handler = LaneDetectionHandler()
+    cg = CameraGeometry(image_width=693, image_height=600)
+    lane_detection_handler = LaneDetectionHandler(cam_geom=cg, model_path="fastai_model.pth")
     lane_detection_handler.load()
-    IMG_PATH: str = os.path.join(os.path.dirname(__file__), "rgb_cam", "000046.jpg")
+    IMG_PATH = "Screenshot 2024-03-24 194940.png"
     img: np.ndarray = cv2.imread(IMG_PATH)
     rgb_img: np.ndarray = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     left_poly_, right_poly_ = lane_detection_handler(rgb_img)
